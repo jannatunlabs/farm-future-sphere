@@ -2,4 +2,4 @@
 - [x] Build home and land selection flow
 - [x] Build intelligence, crops, profit, and risk pages
 - [x] Build future simulation and scenario lab
-- [ ] Verify navigation and interactions on desktop and mobile
+- [x] Verify navigation and interactions on desktop and mobile
