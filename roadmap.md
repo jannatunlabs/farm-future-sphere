@@ -1,0 +1,5 @@
+- [x] Establish TerraFarm visual system and demo imagery
+- [ ] Build home and land selection flow
+- [ ] Build intelligence, crops, profit, and risk pages
+- [ ] Build future simulation and scenario lab
+- [ ] Verify navigation and interactions on desktop and mobile
