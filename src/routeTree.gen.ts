@@ -10,33 +10,128 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CropsRouteImport } from './routes/crops'
+import { Route as IntelligenceRouteImport } from './routes/intelligence'
+import { Route as ProfitRouteImport } from './routes/profit'
+import { Route as RisksRouteImport } from './routes/risks'
+import { Route as ScenariosRouteImport } from './routes/scenarios'
+import { Route as SelectLandRouteImport } from './routes/select-land'
+import { Route as SimulationRouteImport } from './routes/simulation'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CropsRoute = CropsRouteImport.update({
+  id: '/crops',
+  path: '/crops',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntelligenceRoute = IntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfitRoute = ProfitRouteImport.update({
+  id: '/profit',
+  path: '/profit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RisksRoute = RisksRouteImport.update({
+  id: '/risks',
+  path: '/risks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScenariosRoute = ScenariosRouteImport.update({
+  id: '/scenarios',
+  path: '/scenarios',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SelectLandRoute = SelectLandRouteImport.update({
+  id: '/select-land',
+  path: '/select-land',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimulationRoute = SimulationRouteImport.update({
+  id: '/simulation',
+  path: '/simulation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/crops': typeof CropsRoute
+  '/intelligence': typeof IntelligenceRoute
+  '/profit': typeof ProfitRoute
+  '/risks': typeof RisksRoute
+  '/scenarios': typeof ScenariosRoute
+  '/select-land': typeof SelectLandRoute
+  '/simulation': typeof SimulationRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/crops': typeof CropsRoute
+  '/intelligence': typeof IntelligenceRoute
+  '/profit': typeof ProfitRoute
+  '/risks': typeof RisksRoute
+  '/scenarios': typeof ScenariosRoute
+  '/select-land': typeof SelectLandRoute
+  '/simulation': typeof SimulationRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/crops': typeof CropsRoute
+  '/intelligence': typeof IntelligenceRoute
+  '/profit': typeof ProfitRoute
+  '/risks': typeof RisksRoute
+  '/scenarios': typeof ScenariosRoute
+  '/select-land': typeof SelectLandRoute
+  '/simulation': typeof SimulationRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/crops'
+    | '/intelligence'
+    | '/profit'
+    | '/risks'
+    | '/scenarios'
+    | '/select-land'
+    | '/simulation'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/crops'
+    | '/intelligence'
+    | '/profit'
+    | '/risks'
+    | '/scenarios'
+    | '/select-land'
+    | '/simulation'
+  id:
+    | '__root__'
+    | '/'
+    | '/crops'
+    | '/intelligence'
+    | '/profit'
+    | '/risks'
+    | '/scenarios'
+    | '/select-land'
+    | '/simulation'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CropsRoute: typeof CropsRoute
+  IntelligenceRoute: typeof IntelligenceRoute
+  ProfitRoute: typeof ProfitRoute
+  RisksRoute: typeof RisksRoute
+  ScenariosRoute: typeof ScenariosRoute
+  SelectLandRoute: typeof SelectLandRoute
+  SimulationRoute: typeof SimulationRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +143,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/crops': {
+      id: '/crops'
+      path: '/crops'
+      fullPath: '/crops'
+      preLoaderRoute: typeof CropsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/intelligence': {
+      id: '/intelligence'
+      path: '/intelligence'
+      fullPath: '/intelligence'
+      preLoaderRoute: typeof IntelligenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profit': {
+      id: '/profit'
+      path: '/profit'
+      fullPath: '/profit'
+      preLoaderRoute: typeof ProfitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/risks': {
+      id: '/risks'
+      path: '/risks'
+      fullPath: '/risks'
+      preLoaderRoute: typeof RisksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/scenarios': {
+      id: '/scenarios'
+      path: '/scenarios'
+      fullPath: '/scenarios'
+      preLoaderRoute: typeof ScenariosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/select-land': {
+      id: '/select-land'
+      path: '/select-land'
+      fullPath: '/select-land'
+      preLoaderRoute: typeof SelectLandRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simulation': {
+      id: '/simulation'
+      path: '/simulation'
+      fullPath: '/simulation'
+      preLoaderRoute: typeof SimulationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CropsRoute: CropsRoute,
+  IntelligenceRoute: IntelligenceRoute,
+  ProfitRoute: ProfitRoute,
+  RisksRoute: RisksRoute,
+  ScenariosRoute: ScenariosRoute,
+  SelectLandRoute: SelectLandRoute,
+  SimulationRoute: SimulationRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
