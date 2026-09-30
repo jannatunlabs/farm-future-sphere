@@ -1,7 +1,8 @@
 import { Link, useRouterState } from '@tanstack/react-router';
 import { useState, type ReactNode } from 'react';
-import { ArrowRight, ChevronDown, CircleHelp, Earth, FlaskConical, Home, Leaf, Map, Menu, PanelLeftClose, ScanSearch, ShieldAlert, TrendingUp, X, Play, Sparkles } from 'lucide-react';
+import { ArrowRight, ChevronDown, CircleHelp, FlaskConical, Home, Leaf, Map, Menu, PanelLeftClose, ScanSearch, ShieldAlert, TrendingUp, X, Play, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import agromindIcon from '@/assets/agromind-icon.png.asset.json';
 import satellite from '@/assets/farm-satellite.jpg';
 
 export const nav = [
@@ -22,7 +23,7 @@ export const nextStep: Record<string, { label: string, to: typeof nav[number]['t
   '/risks': { label: 'Simulate the future', to: '/simulation' },
   '/simulation': { label: 'Open scenario lab', to: '/scenarios' },
 };
-export function Brand() { return <Link to="/" className="brand"><span className="brand-mark"><Earth size={21} strokeWidth={1.8} /></span><span>terra<span className="text-primary">farm</span><span className="brand-ai"> AI</span></span></Link>; }
+export function Brand() { return <Link to="/" className="brand"><span className="brand-mark"><img src={agromindIcon.url} alt="AgroMind logo" /></span><span>agro<span className="text-primary">mind</span></span></Link>; }
 export function AppShell({ children, title, eyebrow, description, action }: { children: ReactNode, title: string, eyebrow: string, description?: string, action?: ReactNode }) {
   const path = useRouterState({ select: s => s.location.pathname });
   const [open, setOpen] = useState(false);
@@ -39,7 +40,7 @@ export function AppShell({ children, title, eyebrow, description, action }: { ch
     <div className="main-column">
       <header className="app-topbar"><Button variant="ghost" size="icon" className="mobile-menu" onClick={() => setOpen(true)} aria-label="Open menu"><Menu/></Button><div className="topbar-trail"><span>WORKSPACE</span><span className="slash">/</span><strong>{title}</strong></div><div className="topbar-right"><span className="topbar-data"><span className="signal-dot"/> DEMO DATA ACTIVE</span><span className="topbar-avatar">TF</span></div></header>
       <main className="page-content"><div className="page-heading"><div><div className="eyebrow"><span className="eyebrow-line"/>{eyebrow}</div><h1>{title}</h1>{description && <p>{description}</p>}</div>{action && <div className="heading-action">{action}</div>}</div>{children}{nextStep[path] && <div className="next-row"><span>CONTINUE YOUR ANALYSIS</span><Button variant="outline" asChild><Link to={nextStep[path].to}>{nextStep[path].label}<ArrowRight size={16}/></Link></Button></div>}</main>
-      <footer className="app-footer"><span>© 2026 TerraFarm AI · Space Apps demo</span><span>Model-based educational scenarios · Not guaranteed predictions</span></footer>
+      <footer className="app-footer"><span>© 2026 AgroMind · Space Apps demo</span><span>Model-based educational scenarios · Not guaranteed predictions</span></footer>
     </div>
   </div>;
 }

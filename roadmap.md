@@ -1,4 +1,4 @@
-- [x] Establish TerraFarm visual system and demo imagery
+- [x] Establish AgroMind visual system and demo imagery
 - [x] Build home and land selection flow
 - [x] Build intelligence, crops, profit, and risk pages
 - [x] Build future simulation and scenario lab
