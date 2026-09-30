@@ -39,7 +39,7 @@ export function AppShell({ children, title, eyebrow, description, action }: { ch
     <div className="main-column">
       <header className="app-topbar"><Button variant="ghost" size="icon" className="mobile-menu" onClick={() => setOpen(true)} aria-label="Open menu"><Menu/></Button><div className="topbar-trail"><span>WORKSPACE</span><span className="slash">/</span><strong>{title}</strong></div><div className="topbar-right"><span className="topbar-data"><span className="signal-dot"/> DEMO DATA ACTIVE</span><span className="topbar-avatar">TF</span></div></header>
       <main className="page-content"><div className="page-heading"><div><div className="eyebrow"><span className="eyebrow-line"/>{eyebrow}</div><h1>{title}</h1>{description && <p>{description}</p>}</div>{action && <div className="heading-action">{action}</div>}</div>{children}{nextStep[path] && <div className="next-row"><span>CONTINUE YOUR ANALYSIS</span><Button variant="outline" asChild><Link to={nextStep[path].to}>{nextStep[path].label}<ArrowRight size={16}/></Link></Button></div>}</main>
-      <footer className="app-footer"><span>© 2026 TerraFarm AI · Space Apps demo</span><span>Model-based educational scenarios · Not guaranteed predictions</span></footer>
+      <footer className="app-footer"><span>© 2026 AgroMind · Space Apps demo</span><span>Model-based educational scenarios · Not guaranteed predictions</span></footer>
     </div>
   </div>;
 }
