@@ -1,7 +1,8 @@
 import { Link, useRouterState } from '@tanstack/react-router';
 import { useState, type ReactNode } from 'react';
-import { ArrowRight, ChevronDown, CircleHelp, Earth, FlaskConical, Home, Leaf, Map, Menu, PanelLeftClose, ScanSearch, ShieldAlert, TrendingUp, X, Play, Sparkles } from 'lucide-react';
+import { ArrowRight, ChevronDown, CircleHelp, FlaskConical, Home, Leaf, Map, Menu, PanelLeftClose, ScanSearch, ShieldAlert, TrendingUp, X, Play, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import agromindIcon from '@/assets/agromind-icon.png.asset.json';
 import satellite from '@/assets/farm-satellite.jpg';
 
 export const nav = [
@@ -22,7 +23,7 @@ export const nextStep: Record<string, { label: string, to: typeof nav[number]['t
   '/risks': { label: 'Simulate the future', to: '/simulation' },
   '/simulation': { label: 'Open scenario lab', to: '/scenarios' },
 };
-export function Brand() { return <Link to="/" className="brand"><span className="brand-mark"><Earth size={21} strokeWidth={1.8} /></span><span>terra<span className="text-primary">farm</span><span className="brand-ai"> AI</span></span></Link>; }
+export function Brand() { return <Link to="/" className="brand"><span className="brand-mark"><img src={agromindIcon.url} alt="AgroMind logo" /></span><span>agro<span className="text-primary">mind</span></span></Link>; }
 export function AppShell({ children, title, eyebrow, description, action }: { children: ReactNode, title: string, eyebrow: string, description?: string, action?: ReactNode }) {
   const path = useRouterState({ select: s => s.location.pathname });
   const [open, setOpen] = useState(false);
