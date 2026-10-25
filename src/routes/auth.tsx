@@ -13,12 +13,10 @@ type AppPath = (typeof nav)[number]['to'];
 const appPaths: readonly string[] = nav.map((n) => n.to);
 
 export const Route = createFileRoute('/auth')({
-  validateSearch: (search: Record<string, unknown>) => ({
-    redirect:
-      typeof search['redirect'] === 'string' && appPaths.includes(search['redirect'])
-        ? (search['redirect'] as AppPath)
-        : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>) => {
+    const r = search['redirect'];
+    return typeof r === 'string' && appPaths.includes(r) ? { redirect: r as AppPath } : {};
+  },
   head: () => ({
     meta: [
       { title: 'Sign in — AgroMind' },
