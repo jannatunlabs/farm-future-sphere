@@ -15,9 +15,9 @@ const appPaths: readonly string[] = nav.map((n) => n.to);
 export const Route = createFileRoute('/auth')({
   validateSearch: (search: Record<string, unknown>) => ({
     redirect:
-      typeof search.redirect === 'string' && appPaths.includes(search.redirect)
-        ? (search.redirect as AppPath)
-        : ('/' as AppPath),
+      typeof search['redirect'] === 'string' && appPaths.includes(search['redirect'])
+        ? (search['redirect'] as AppPath)
+        : undefined,
   }),
   head: () => ({
     meta: [
@@ -31,7 +31,7 @@ export const Route = createFileRoute('/auth')({
 });
 
 function AuthPage() {
-  const { redirect } = Route.useSearch();
+  const { redirect = '/' } = Route.useSearch();
   const navigate = useNavigate();
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [email, setEmail] = useState('');
