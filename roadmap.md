@@ -3,3 +3,4 @@
 - [x] Build intelligence, crops, profit, and risk pages
 - [x] Build future simulation and scenario lab
 - [x] Verify navigation and interactions on desktop and mobile
+- [x] Add authentication (email/password, Google, Lovable) with session-aware header
