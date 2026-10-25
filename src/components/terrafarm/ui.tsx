@@ -1,7 +1,10 @@
-import { Link, useRouterState } from '@tanstack/react-router';
+import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
+import { useQueryClient } from '@tanstack/react-query';
 import { useState, type ReactNode } from 'react';
-import { ArrowRight, ChevronDown, CircleHelp, FlaskConical, Home, Leaf, Map, Menu, PanelLeftClose, ScanSearch, ShieldAlert, TrendingUp, X, Play, Sparkles } from 'lucide-react';
+import { ArrowRight, ChevronDown, CircleHelp, FlaskConical, Home, Leaf, LogOut, Map, Menu, PanelLeftClose, ScanSearch, ShieldAlert, TrendingUp, X, Play, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
+import { useSession } from '@/hooks/use-session';
 import agromindIcon from '@/assets/agromind-icon.png.asset.json';
 import satellite from '@/assets/farm-satellite.jpg';
 
@@ -24,6 +27,21 @@ export const nextStep: Record<string, { label: string, to: typeof nav[number]['t
   '/simulation': { label: 'Open scenario lab', to: '/scenarios' },
 };
 export function Brand() { return <Link to="/" className="brand"><span className="brand-mark"><img src={agromindIcon.url} alt="AgroMind logo" /></span><span>agro<span className="text-primary">mind</span></span></Link>; }
+function AuthControl() {
+  const { user, loading } = useSession();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  if (loading) return null;
+  if (!user) return <Button variant="outline" size="sm" asChild><Link to="/auth">Sign in</Link></Button>;
+  const initials = (user.email ?? 'A').slice(0, 2).toUpperCase();
+  async function signOut() {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    navigate({ to: '/auth', replace: true });
+  }
+  return <div className="auth-control"><span className="topbar-avatar" title={user.email ?? undefined}>{initials}</span><Button variant="ghost" size="icon" onClick={signOut} aria-label="Sign out" title="Sign out"><LogOut size={15} /></Button></div>;
+}
 export function AppShell({ children, title, eyebrow, description, action }: { children: ReactNode, title: string, eyebrow: string, description?: string, action?: ReactNode }) {
   const path = useRouterState({ select: s => s.location.pathname });
   const [open, setOpen] = useState(false);
@@ -38,7 +56,7 @@ export function AppShell({ children, title, eyebrow, description, action }: { ch
     </aside>
     {open && <div className="mobile-scrim" onClick={() => setOpen(false)}/>}
     <div className="main-column">
-      <header className="app-topbar"><Button variant="ghost" size="icon" className="mobile-menu" onClick={() => setOpen(true)} aria-label="Open menu"><Menu/></Button><div className="topbar-trail"><span>WORKSPACE</span><span className="slash">/</span><strong>{title}</strong></div><div className="topbar-right"><span className="topbar-data"><span className="signal-dot"/> DEMO DATA ACTIVE</span><span className="topbar-avatar">TF</span></div></header>
+      <header className="app-topbar"><Button variant="ghost" size="icon" className="mobile-menu" onClick={() => setOpen(true)} aria-label="Open menu"><Menu/></Button><div className="topbar-trail"><span>WORKSPACE</span><span className="slash">/</span><strong>{title}</strong></div><div className="topbar-right"><span className="topbar-data"><span className="signal-dot"/> DEMO DATA ACTIVE</span><AuthControl /></div></header>
       <main className="page-content"><div className="page-heading"><div><div className="eyebrow"><span className="eyebrow-line"/>{eyebrow}</div><h1>{title}</h1>{description && <p>{description}</p>}</div>{action && <div className="heading-action">{action}</div>}</div>{children}{nextStep[path] && <div className="next-row"><span>CONTINUE YOUR ANALYSIS</span><Button variant="outline" asChild><Link to={nextStep[path].to}>{nextStep[path].label}<ArrowRight size={16}/></Link></Button></div>}</main>
       <footer className="app-footer"><span>© 2026 AgroMind · Space Apps demo</span><span>Model-based educational scenarios · Not guaranteed predictions</span></footer>
     </div>
