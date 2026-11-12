@@ -11,7 +11,7 @@ import {
   Droplets,
   TrendingUp,
 } from "lucide-react";
-import { waterForecast, waterStressTrend } from "./data";
+import { waterForecast, waterStressTrend } from "./terrafarm/data";
 
 interface MonthNdvi {
   month: string;
