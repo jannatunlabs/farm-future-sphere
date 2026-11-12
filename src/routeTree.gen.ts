@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CropsRouteImport } from './routes/crops'
+import { Route as DataSourcesRouteImport } from './routes/data-sources'
 import { Route as IntelligenceRouteImport } from './routes/intelligence'
 import { Route as ProfitRouteImport } from './routes/profit'
 import { Route as RisksRouteImport } from './routes/risks'
@@ -32,6 +33,11 @@ const AuthRoute = AuthRouteImport.update({
 const CropsRoute = CropsRouteImport.update({
   id: '/crops',
   path: '/crops',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DataSourcesRoute = DataSourcesRouteImport.update({
+  id: '/data-sources',
+  path: '/data-sources',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IntelligenceRoute = IntelligenceRouteImport.update({
@@ -69,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/crops': typeof CropsRoute
+  '/data-sources': typeof DataSourcesRoute
   '/intelligence': typeof IntelligenceRoute
   '/profit': typeof ProfitRoute
   '/risks': typeof RisksRoute
@@ -80,6 +87,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/crops': typeof CropsRoute
+  '/data-sources': typeof DataSourcesRoute
   '/intelligence': typeof IntelligenceRoute
   '/profit': typeof ProfitRoute
   '/risks': typeof RisksRoute
@@ -92,6 +100,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/crops': typeof CropsRoute
+  '/data-sources': typeof DataSourcesRoute
   '/intelligence': typeof IntelligenceRoute
   '/profit': typeof ProfitRoute
   '/risks': typeof RisksRoute
@@ -105,6 +114,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/crops'
+    | '/data-sources'
     | '/intelligence'
     | '/profit'
     | '/risks'
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/crops'
+    | '/data-sources'
     | '/intelligence'
     | '/profit'
     | '/risks'
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/crops'
+    | '/data-sources'
     | '/intelligence'
     | '/profit'
     | '/risks'
@@ -139,6 +151,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   CropsRoute: typeof CropsRoute
+  DataSourcesRoute: typeof DataSourcesRoute
   IntelligenceRoute: typeof IntelligenceRoute
   ProfitRoute: typeof ProfitRoute
   RisksRoute: typeof RisksRoute
@@ -168,6 +181,13 @@ declare module '@tanstack/react-router' {
       path: '/crops'
       fullPath: '/crops'
       preLoaderRoute: typeof CropsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/data-sources': {
+      id: '/data-sources'
+      path: '/data-sources'
+      fullPath: '/data-sources'
+      preLoaderRoute: typeof DataSourcesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/intelligence': {
@@ -219,6 +239,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   CropsRoute: CropsRoute,
+  DataSourcesRoute: DataSourcesRoute,
   IntelligenceRoute: IntelligenceRoute,
   ProfitRoute: ProfitRoute,
   RisksRoute: RisksRoute,

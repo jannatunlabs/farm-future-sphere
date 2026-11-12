@@ -40,11 +40,30 @@ interface RotationOption {
 
 export const RotationComparisonSection: React.FC = () => {
   // Feature #5: Farmer Constraints Input (Water & Equipment)
-  const [waterConstraint, setWaterConstraint] =
-    useState<WaterAvailability>("low");
-  const [equipmentConstraint, setEquipmentConstraint] =
-    useState<EquipmentLevel>("basic_machinery");
+  const [waterConstraint, setWaterConstraint] = useState<WaterAvailability>("low");
+  const [equipmentConstraint, setEquipmentConstraint] = useState<EquipmentLevel>("basic_machinery");
   const [soilTested, setSoilTested] = useState<boolean>(false);
+
+  // Feature #4: Farmer Priority Weighting (পানি, মাটি, আয়, বাজার অগ্রাধিকার)
+  // Each priority maps to one axis of the 4-axis scorecard and rescales the final score.
+  const [priorities, setPriorities] = useState<Record<string, number>>({
+    water: 25,
+    soil: 25,
+    income: 25,
+    market: 25,
+  });
+
+  const weightedScore = (scores: RotationOption["scores"], weights: Record<string, number>) => {
+    const total = weights.water + weights.soil + weights.income + weights.market;
+    if (total === 0) return 0;
+    return Math.round(
+      (scores.waterResilience * weights.water +
+        scores.soilFertility * weights.soil +
+        scores.yieldStability * weights.income +
+        scores.costAndLabor * weights.market) /
+        total,
+    );
+  };
 
   // Feature #6 & #7: 3 Rotation Strategies (including current) + Full Evidence Cards
   const getRotations = (): RotationOption[] => {
@@ -117,9 +136,7 @@ export const RotationComparisonSection: React.FC = () => {
         id: "resilient_diversified",
         title: "বিকল্প ২ (জলবায়ু সহনশীল): ভুট্টা → সবজি/পাট → আমন ধান",
         badge:
-          equipmentConstraint !== "manual"
-            ? "উচ্চ ফলন ও বাজার উপযোগী"
-            : "মাঝারি শ্রম ও উচ্চ আয়",
+          equipmentConstraint !== "manual" ? "উচ্চ ফলন ও বাজার উপযোগী" : "মাঝারি শ্রম ও উচ্চ আয়",
         sequence: ["ভুট্টা (রবি)", "পাট বা স্বল্পমেয়াদী সবজি (খরিফ-১)", "আমন ধান (খরিফ-২)"],
         confidence: soilTested ? "High" : "Low",
         scores: {
@@ -197,7 +214,8 @@ export const RotationComparisonSection: React.FC = () => {
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-900 max-w-md flex items-start gap-2">
           <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
           <span>
-            <strong>সতর্কবার্তা:</strong> এটি একটি সহায়ক টুল, কৃষকের বিচার বা স্থানীয় কৃষি বিশেষজ্ঞের বিকল্প নয়। নতুন ফসল চক্র শুরুর আগে উপ-সহকারী কৃষি কর্মকর্তার পরামর্শ নিন।
+            <strong>সতর্কবার্তা:</strong> এটি একটি সহায়ক টুল, কৃষকের বিচার বা স্থানীয় কৃষি
+            বিশেষজ্ঞের বিকল্প নয়। নতুন ফসল চক্র শুরুর আগে উপ-সহকারী কৃষি কর্মকর্তার পরামর্শ নিন।
           </span>
         </div>
       </div>
@@ -211,7 +229,10 @@ export const RotationComparisonSection: React.FC = () => {
               স্যাটেলাইট বনাম মাটি পরীক্ষার পার্থক্য (কেন মাটি পরীক্ষা জরুরি?)
             </h3>
             <p className="text-xs sm:text-sm text-blue-900 mt-0.5">
-              <strong>“স্যাটেলাইট এলাকার তথ্য দেয়, মাটি পরীক্ষা আপনার জমির তথ্য দেয়।”</strong> NASA স্যাটেলাইট (যেমন SMAP, MODIS) কয়েক কিলোমিটার জুড়ে আর্দ্রতা ও সবুজায়নের গড় হিসাব দেয়, কিন্তু আপনার নির্দিষ্ট জমির pH বা সারের ঘাটতি কেবল স্থানীয় মাটি পরীক্ষাতেই শতভাগ নিশ্চিত হওয়া যায়।
+              <strong>“স্যাটেলাইট এলাকার তথ্য দেয়, মাটি পরীক্ষা আপনার জমির তথ্য দেয়।”</strong>{" "}
+              NASA স্যাটেলাইট (যেমন SMAP, MODIS) কয়েক কিলোমিটার জুড়ে আর্দ্রতা ও সবুজায়নের গড় হিসাব
+              দেয়, কিন্তু আপনার নির্দিষ্ট জমির pH বা সারের ঘাটতি কেবল স্থানীয় মাটি পরীক্ষাতেই শতভাগ
+              নিশ্চিত হওয়া যায়।
             </p>
           </div>
         </div>
@@ -276,9 +297,7 @@ export const RotationComparisonSection: React.FC = () => {
                 <button
                   key={item.id}
                   type="button"
-                  onClick={() =>
-                    setEquipmentConstraint(item.id as EquipmentLevel)
-                  }
+                  onClick={() => setEquipmentConstraint(item.id as EquipmentLevel)}
                   className={`py-2 px-3 rounded-lg text-xs font-semibold border transition-all ${
                     equipmentConstraint === item.id
                       ? "bg-emerald-600 text-white border-emerald-600 shadow-sm"
@@ -293,6 +312,107 @@ export const RotationComparisonSection: React.FC = () => {
         </div>
       </div>
 
+      {/* Feature #4: Farmer Priority Weighting (NEW) */}
+      <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm">
+        <h3 className="text-base font-bold text-slate-800 mb-3 flex items-center gap-2">
+          <TrendingUp className="w-5 h-5 text-emerald-600" />
+          আপনার অগ্রাধিকার ওজন (Farmer Priority Weighting)
+        </h3>
+        <p className="text-sm text-slate-600 mb-4">
+          কৃষকের প্রাথমিক লক্ষ্য অনুযায়ী ৪-অক্ষের স্কোরকার্ডের ওজন বদলায়। সব মূল্য সমান রাখলে
+          প্রতিটি কৌশলের সমগ্র স্কোর পরিবর্তন হয়।
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* Water priority */}
+          <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+            <label className="block text-xs font-medium text-slate-700 mb-1">
+              <Droplets className="w-3.5 h-3.5 text-blue-600" />
+              পানি (Water): {priorities.water}%
+            </label>
+            <input
+              type="range"
+              min={0}
+              max={50}
+              step={1}
+              value={priorities.water}
+              onChange={(e) => setPriorities((p) => ({ ...p, water: Number(e.target.value) }))}
+              className="w-full h-2 bg-slate-300 rounded-lg appearance-none cursor-pointer accent-blue-600"
+            />
+            <div className="flex justify-between text-[11px] text-slate-500 mt-1">
+              <span>0%</span>
+              <span>25%</span>
+              <span>50%</span>
+            </div>
+          </div>
+
+          {/* Soil priority */}
+          <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+            <label className="block text-xs font-medium text-slate-700 mb-1">
+              <ShieldAlert className="w-3.5 h-3.5 text-red-600" />
+              মাটি (Soil): {priorities.soil}%
+            </label>
+            <input
+              type="range"
+              min={0}
+              max={50}
+              step={1}
+              value={priorities.soil}
+              onChange={(e) => setPriorities((p) => ({ ...p, soil: Number(e.target.value) }))}
+              className="w-full h-2 bg-slate-300 rounded-lg appearance-none cursor-pointer accent-red-600"
+            />
+            <div className="flex justify-between text-[11px] text-slate-500 mt-1">
+              <span>0%</span>
+              <span>25%</span>
+              <span>50%</span>
+            </div>
+          </div>
+
+          {/* Income priority */}
+          <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+            <label className="block text-xs font-medium text-slate-700 mb-1">
+              <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
+              আয় (Income): {priorities.income}%
+            </label>
+            <input
+              type="range"
+              min={0}
+              max={50}
+              step={1}
+              value={priorities.income}
+              onChange={(e) => setPriorities((p) => ({ ...p, income: Number(e.target.value) }))}
+              className="w-full h-2 bg-slate-300 rounded-lg appearance-none cursor-pointer accent-green-600"
+            />
+            <div className="flex justify-between text-[11px] text-slate-500 mt-1">
+              <span>0%</span>
+              <span>25%</span>
+              <span>50%</span>
+            </div>
+          </div>
+
+          {/* Market priority */}
+          <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+            <label className="block text-xs font-medium text-slate-700 mb-1">
+              <TrendingUp className="w-3.5 h-3.5 text-amber-600" />
+              বাজার (Market): {priorities.market}%
+            </label>
+            <input
+              type="range"
+              min={0}
+              max={50}
+              step={1}
+              value={priorities.market}
+              onChange={(e) => setPriorities((p) => ({ ...p, market: Number(e.target.value) }))}
+              className="w-full h-2 bg-slate-300 rounded-lg appearance-none cursor-pointer accent-amber-600"
+            />
+            <div className="flex justify-between text-[11px] text-slate-500 mt-1">
+              <span>0%</span>
+              <span>25%</span>
+              <span>50%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Feature #6 & #7: 3 Rotation Comparison Cards + Evidence Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {rotations.map((rotation) => (
@@ -302,17 +422,15 @@ export const RotationComparisonSection: React.FC = () => {
               rotation.isCurrent
                 ? "border-slate-300"
                 : rotation.id === "water_saving" && waterConstraint === "low"
-                ? "border-green-600 ring-2 ring-green-500/20"
-                : "border-emerald-200"
+                  ? "border-green-600 ring-2 ring-green-500/20"
+                  : "border-emerald-200"
             }`}
           >
             <div>
               {/* Card Top Banner */}
               <div
                 className={`px-4 py-2 text-xs font-bold flex items-center justify-between ${
-                  rotation.isCurrent
-                    ? "bg-slate-200 text-slate-800"
-                    : "bg-emerald-600 text-white"
+                  rotation.isCurrent ? "bg-slate-200 text-slate-800" : "bg-emerald-600 text-white"
                 }`}
               >
                 <span>{rotation.badge}</span>
@@ -322,9 +440,7 @@ export const RotationComparisonSection: React.FC = () => {
               <div className="p-5 space-y-4">
                 {/* Title & Confidence */}
                 <div className="space-y-2">
-                  <h3 className="text-lg font-bold text-slate-900">
-                    {rotation.title}
-                  </h3>
+                  <h3 className="text-lg font-bold text-slate-900">{rotation.title}</h3>
                   <div>{getConfidenceBadge(rotation.confidence)}</div>
                 </div>
 
@@ -372,14 +488,26 @@ export const RotationComparisonSection: React.FC = () => {
                       </div>
                       <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
                         <div
-                          className={`h-full rounded-full ${getScoreColor(
-                            item.val
-                          )}`}
+                          className={`h-full rounded-full ${getScoreColor(item.val)}`}
                           style={{ width: `${item.val}%` }}
                         />
                       </div>
                     </div>
                   ))}
+                </div>
+
+                {/* Feature #4: Weighted Overall Score (user-defined priorities) */}
+                <div className="mt-3 p-3 rounded-lg bg-slate-50 border border-slate-200">
+                  <div className="flex items-center justify-between text-xs font-semibold text-slate-700">
+                    <span>সমগ্র ওজনিত স্কোর (Weighted Overall Score)</span>
+                    <span className="text-base font-bold text-slate-900">
+                      {weightedScore(rotation.scores, priorities)}%
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-500 mt-1">
+                    পানি {priorities.water}% · মাটি {priorities.soil}% · আয় {priorities.income}% ·
+                    বাজার {priorities.market}%
+                  </p>
                 </div>
 
                 {/* Feature #7: Detailed Evidence Card (প্রমাণ-কার্ড) */}
@@ -391,18 +519,12 @@ export const RotationComparisonSection: React.FC = () => {
 
                   <div>
                     <span className="font-semibold text-slate-800">কেন এই কৌশল: </span>
-                    <span className="text-slate-600">
-                      {rotation.evidenceCard.reason}
-                    </span>
+                    <span className="text-slate-600">{rotation.evidenceCard.reason}</span>
                   </div>
 
                   <div>
-                    <span className="font-semibold text-slate-800">
-                      NASA ও ডেটা প্রমাণ:{" "}
-                    </span>
-                    <span className="text-slate-600">
-                      {rotation.evidenceCard.evidence}
-                    </span>
+                    <span className="font-semibold text-slate-800">NASA ও ডেটা প্রমাণ: </span>
+                    <span className="text-slate-600">{rotation.evidenceCard.evidence}</span>
                   </div>
 
                   <div>
@@ -427,9 +549,7 @@ export const RotationComparisonSection: React.FC = () => {
                       <ShieldAlert className="w-3.5 h-3.5 text-red-700 shrink-0" />
                       স্থানীয় যাচাইয়ের ঝুঁকি:
                     </span>
-                    <p className="mt-0.5">
-                      {rotation.evidenceCard.validationRisks}
-                    </p>
+                    <p className="mt-0.5">{rotation.evidenceCard.validationRisks}</p>
                   </div>
                 </div>
               </div>
