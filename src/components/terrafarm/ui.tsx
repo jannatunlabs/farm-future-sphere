@@ -13,6 +13,7 @@ import {
   Menu,
   PanelLeftClose,
   ScanSearch,
+  Satellite,
   ShieldAlert,
   TrendingUp,
   X,
